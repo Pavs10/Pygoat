@@ -535,7 +535,7 @@ def sec_mis_lab(request):
 def secret(request):
     XHost = request.headers.get('X-Host', 'None')
     if(XHost == 'admin.localhost:8000'):
-        return render(request,"Lab/sec_mis/sec_mis_lab.html", {"secret": "S3CR37K3Y"})
+        return render(request,"Lab/sec_mis/sec_mis_lab.html", {"secret": os.getenv('LAB_SECRET_KEY')})
     else:
         return render(request,"Lab/sec_mis/sec_mis_lab.html", {"no_secret": "Only admin.localhost:8000 can access, Your X-Host is " + XHost})
 
@@ -763,7 +763,7 @@ def a1_broken_access_lab_1(request):
                     "data":"0NLY_F0R_4DM1N5",
                     "username": "admin"
                 })
-        elif (name=='jack' and password=='jacktheripper'): # Will implement hashing here
+        elif (name==os.getenv('JACK_USER') and password==os.getenv('JACK_PASS')): # Will implement hashing here
             html = render(
             request, 
             'Lab_2021/A1_BrokenAccessControl/broken_access_lab_1.html', 
@@ -803,7 +803,7 @@ def a1_broken_access_lab_2(request):
                     "username": "admin",
                     "status": "admin"
                 })
-        elif ( name=='jack' and password=='jacktheripper'): # Will implement hashing here
+        elif (name == os.getenv('JACK_USER') and password == os.getenv('JACK_PASS')): # Will implement hashing here
             html = render(
             request, 
             'Lab_2021/A1_BrokenAccessControl/broken_access_lab_2.html', 
@@ -828,9 +828,9 @@ def a1_broken_access_lab_3(request):
         username = request.POST["username"]
         password = request.POST["password"]
 
-        if username == 'John' and password == 'reaper':
+        if username == os.getenv('LAB_USER_JOHN') and password == os.getenv('LAB_PASS_JOHN'):
             return render(request,'Lab_2021/A1_BrokenAccessControl/broken_access_lab_3.html', {'loggedin':True, 'admin': False})
-        elif username == 'admin' and password == 'admin_pass':
+        elif username == os.getenv('LAB_USER_ADMIN') and password == os.getenv('LAB_PASS_ADMIN'):
             return render(request,'Lab_2021/A1_BrokenAccessControl/broken_access_lab_3.html', {'loggedin':True, 'admin': True})
         return render(request, 'Lab_2021/A1_BrokenAccessControl/broken_access_lab_3.html', {'loggedin':False})
 
@@ -863,13 +863,13 @@ def injection_sql_lab(request):
         if name:
             sql_query = "SELECT * FROM introduction_sql_lab_table WHERE id='"+name+"'AND password='"+password+"'"
 
-            sql_instance = sql_lab_table(id="admin", password="65079b006e85a7e798abecb99e47c154")
+            sql_instance = sql_lab_table(id="admin", password=os.getenv('DB_ADMIN_PASS'))
             sql_instance.save()
-            sql_instance = sql_lab_table(id="jack", password="jack")
+            sql_instance = sql_lab_table(id="jack", password=os.getenv('DB_JACK_PASS'))
             sql_instance.save()
-            sql_instance = sql_lab_table(id="slinky", password="b4f945433ea4c369c12741f62a23ccc0")
+            sql_instance = sql_lab_table(id="slinky", password=os.getenv('DB_SLINKY_PASS'))
             sql_instance.save()
-            sql_instance = sql_lab_table(id="bloke", password="f8d1ce191319ea8f4d1d26e65e130dd5")
+            sql_instance = sql_lab_table(id="bloke", password=os.getenv('DB_BLOKE_PASS'))
             sql_instance.save()
 
             print(sql_query)
@@ -1069,7 +1069,7 @@ def crypto_failure_lab3(request):
             username = request.POST["username"]
             password = request.POST["password"]
             try:
-                if username == "User" and password == "P@$$w0rd":
+                if username == os.getenv('AUTH_USER') and password == os.getenv('AUTH_PASS'):
                     expire = datetime.datetime.now() + datetime.timedelta(minutes=60)
                     cookie = f"{username}|{expire}"
                     response = render(request,"Lab_2021/A2_Crypto_failur/crypto_failure_lab3.html",{"success":True, "failure":False , "admin":False})
@@ -1161,10 +1161,10 @@ def auth_failure_lab2(request):
 
 ## Hardcoed user table for demonstration purpose only
 USER_A7_LAB3 = {
-    "User1":{"userid":"1", "username":"User1", "password": "491a2800b80719ea9e3c89ca5472a8bda1bdd1533d4574ea5bd85b70a8e93be0"},
-    "User2":{"userid":"2", "username":"User2", "password": "c577e95bf729b94c30a878d01155693a9cdddafbb2fe0d52143027474ecb91bc"},
-    "User3":{"userid":"3", "username":"User3", "password": "5a91a66f0c86b5435fe748706b99c17e6e54a17e03c2a3ef8d0dfa918db41cf6"},
-    "User4":{"userid":"4", "username":"User4", "password": "6046bc3337728a60967a151ee584e4fd7c53740a49485ebdc38cac42a255f266"}
+    "User1":{"userid":"1", "username":"User1", "password": os.getenv('USER1_HASH')},
+    "User2":{"userid":"2", "username":"User2", "password": os.getenv('USER2_HASH')},
+    "User3":{"userid":"3", "username":"User3", "password": os.getenv('USER3_HASH')},
+    "User4":{"userid":"4", "username":"User4", "password": os.getenv('USER4_HASH')}
 }
 
 # USER_A7_LAB3 = {
