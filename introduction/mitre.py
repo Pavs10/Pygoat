@@ -2,7 +2,7 @@ import datetime
 import re
 import subprocess
 import shlex
-from hashlib import md5
+from django.contrib.auth.hashers import make_password
 
 import jwt
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
@@ -159,7 +159,7 @@ def csrf_lab_login(request):
     elif request.method == 'POST':
         password = request.POST.get('password')
         username = request.POST.get('username')
-        password = md5(password.encode()).hexdigest()
+        password = make_password(password)
         User = CSRF_user_tbl.objects.filter(username=username, password=password)
         if User:
             payload ={
