@@ -1,6 +1,7 @@
 import datetime
 import re
 import subprocess
+import shlex
 from hashlib import md5
 
 import jwt
@@ -230,7 +231,8 @@ def mitre_lab_17(request):
     return render(request, 'mitre/mitre_lab_17.html')
 
 def command_out(command):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    args = shlex.split(command)
+    process = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return process.communicate()
     
 
